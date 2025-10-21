@@ -32,14 +32,11 @@ class _ScanScreenState extends State<ScanScreen> {
         print('No cameras available');
         return;
       }
-      
-      _controller = CameraController(
-        cameras[0],
-        ResolutionPreset.medium,
-      );
-      
+
+      _controller = CameraController(cameras[0], ResolutionPreset.medium);
+
       await _controller.initialize();
-      
+
       if (mounted) {
         setState(() {
           _isInitialized = true;
@@ -73,8 +70,9 @@ class _ScanScreenState extends State<ScanScreen> {
 
       final inputImage = InputImage.fromFilePath(imagePath);
       final textRecognizer = TextRecognizer();
-      final RecognizedText recognizedText =
-          await textRecognizer.processImage(inputImage);
+      final RecognizedText recognizedText = await textRecognizer.processImage(
+        inputImage,
+      );
 
       textRecognizer.close();
 
@@ -90,10 +88,13 @@ class _ScanScreenState extends State<ScanScreen> {
         );
       }
     } catch (e) {
-      print('Error taking picture: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          const SnackBar(
+            content: Text(
+              "Pemindaian Gagal! Periksa Izin Kamera atau coba lagi.",
+            ),
+          ),
         );
       }
     }
@@ -103,24 +104,28 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     if (!_isInitialized) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Scan Document'),
-        ),
+        backgroundColor: Colors.grey[900],
         body: const Center(
-          child: CircularProgressIndicator(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(color: Colors.yellow),
+              SizedBox(height: 16),
+              Text(
+                'Memuat Kamera... Harap tunggu.',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Scan Document'),
-      ),
+      appBar: AppBar(title: const Text('Scan Document')),
       body: Column(
         children: [
-          Expanded(
-            child: CameraPreview(_controller),
-          ),
+          Expanded(child: CameraPreview(_controller)),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton.icon(
@@ -128,7 +133,10 @@ class _ScanScreenState extends State<ScanScreen> {
               icon: const Icon(Icons.camera),
               label: const Text('Ambil Foto & Scan'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
             ),
           ),

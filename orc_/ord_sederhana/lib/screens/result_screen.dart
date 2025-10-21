@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'home_screen.dart';
 
 class ResultScreen extends StatelessWidget {
   final String imagePath;
@@ -42,8 +43,9 @@ class ResultScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+
             
-            // Teks hasil OCR
+          // Menampilkan teks OCR apa adanya (tanpa replaceAll)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -53,28 +55,28 @@ class ResultScreen extends StatelessWidget {
                 border: Border.all(color: Colors.grey.shade300),
               ),
               child: Text(
-                recognizedText.isEmpty 
-                    ? 'Tidak ada teks yang terdeteksi' 
-                    : recognizedText,
+                recognizedText.isEmpty
+                    ? 'Tidak ada teks yang terdeteksi'
+                    : recognizedText, // tampilkan teks utuh dengan baris baru
                 style: const TextStyle(fontSize: 16),
               ),
             ),
-            const SizedBox(height: 24),
-            
-            // Tombol kembali
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('Scan Lagi'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-            ),
+            const SizedBox(height: 80), 
           ],
         ),
+      ),
+
+     
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Kembali ke Home',
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false, // hapus semua halaman di atas stack
+          );
+        },
+        child: const Icon(Icons.home),
       ),
     );
   }

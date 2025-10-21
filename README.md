@@ -165,7 +165,7 @@ Muncul icin volume
 Saat icon volume di klik akan memunculkan suara membaca teks hasil scan 
 
 
-[Tonton Video Demo](testing.mp4)
+[Tonton Video Demo](orc_\ord_sederhana\testing.mp4)
 
 
 
